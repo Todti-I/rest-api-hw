@@ -1,0 +1,195 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Cost accounting",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/api"
+    }
+  ],
+  "paths": {
+    "/costs": {
+      "post": {
+        "tags": ["Costs"],
+        "summary": "Добавить расходы",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditableCosts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Costs"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный данные в rublesCount или time"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Costs"],
+        "summary": "Получить все расходы",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Costs"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/costs/{costsId}": {
+      "get": {
+        "tags": ["Costs"],
+        "summary": "Получить расход по ID",
+        "parameters": [
+          {
+            "name": "costsId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditableCosts"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Расход не найден"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Costs"],
+        "summary": "Обновить расход по ID",
+        "parameters": [
+          {
+            "name": "costsId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditableCosts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Costs"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный данные в rublesCount или time"
+          },
+          "404": {
+            "description": "Расход не найден"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Costs"],
+        "summary": "Удалить расход по ID",
+        "parameters": [
+          {
+            "name": "costsId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Расход успешно удален"
+          },
+          "404": {
+            "description": "Расход не найден"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Costs": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "41dedbde-68a6-40a6-a276-a564eaedccd7"
+          },
+          "rublesCount": {
+            "type": "float",
+            "example": 546.7
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-12-18T20:30:44.117Z"
+          }
+        }
+      },
+      "EditableCosts": {
+        "type": "object",
+        "properties": {
+          "rublesCount": {
+            "type": "float",
+            "example": 546.7
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-12-18T20:30:44.117Z"
+          }
+        }
+      }
+    }
+  }
+}
